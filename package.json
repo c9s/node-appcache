@@ -1,0 +1,16 @@
+{
+  "name": "appcache",
+  "version": "0.0.1",
+  "description": "appcache generator for offline application",
+  "main": "appcache.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "appcache",
+    "offline"
+  ],
+  "author": "Yo-An Lin <cornelius.howl@gmail.com>",
+  "license": "BSD"
+}
