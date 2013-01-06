@@ -2,7 +2,7 @@
   "name": "appcache",
   "version": "0.0.1",
   "description": "appcache generator for offline application",
-  "main": "appcache.js",
+  "main": "./appcache.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,5 +12,8 @@
     "offline"
   ],
   "author": "Yo-An Lin",
-  "license": "BSD"
+  "licenses":     [{
+    "type":       "MIT",
+    "url":        "https://raw.github.com/jashkenas/coffee-script/master/LICENSE"
+  }],
 }
