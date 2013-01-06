@@ -1,5 +1,7 @@
 
-fs = require("fs")
+fs = require "fs"
+glob = require "glob"
+wrench = require "wrench"
 
 class AppCache
   meta: { }
@@ -8,6 +10,7 @@ class AppCache
   fallbackList: []
 
   configures: {}
+  options: {}
 
   constructor: (@cacheFile, @options) ->
     # @cacheFile = ".appcache"
@@ -17,7 +20,7 @@ class AppCache
       @meta = { version: 0.01 }
     @bump()
 
-    console.log "AppCache Manifest Version: v#{ @meta.version }"
+    console.info "AppCache Manifest Version: v#{ @meta.version }"
 
     fs.writeFileSync(@cacheFile, JSON.stringify(@meta),"utf8")
 
@@ -69,19 +72,46 @@ class AppCache
     else
       output = "CACHE MANIFEST\n"
       output += "# v#{ @meta.version }\n"
-      output += "CACHE:\n" + @cacheList.join("\n") if @cacheList.length
+      output += "CACHE:\n" + @_expandList('cacheList').join("\n") if @cacheList.length
       output += "NETWORK:\n" + @networkList.join("\n") if @networkList.length
       output += "FALLBACK:\n" + @fallbackList.join("\n") if @fallbackList.length
     return output
 
+  _expandPath: (path) ->
+    # skip expand if there is a wild card.
+    if typeof path is "string" and path.match(/\*/)
+      return glob.sync(path)
+
+    stats = fs.statSync(path)
+    return if stats.isDirectory() \
+      then wrench.readdirSyncRecursive(path) \
+      else [path]
+
+  _expandList: (listname) ->
+    newlist = []
+    item = @[listname]
+    for item in list
+      newlist.push path for path in @_expandPath(item)
+
+    if @options.debug
+      console.log listname
+      console.log "- #{item} " for item in newlist
+    return newlist
+
   route: ->
     self = this
+    cached = ""
     return (req,res) ->
+
       res.writeHead(200, {
         "Content-Type": "text/plain; chartset=UTF-8"
       })
-      res.write(self.write())
+      if self.options.cache
+        if not cached
+          cached = self.write()
+        res.write(cached)
+      else
+        res.write(self.write())
       res.end()
-
 
 module.exports = AppCache
