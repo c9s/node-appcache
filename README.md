@@ -23,7 +23,7 @@ don't need to bump it manually.
 
 ```coffee
 AppCache = require("appcache")
-appcache = new AppCache(".appcache")
+appcache = new AppCache(".appcache",{ mode: "development" })
 appcache.configure "production", () ->
     @cache([
        "/js/coffee-script.js"
