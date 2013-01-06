@@ -104,7 +104,7 @@ class AppCache
     return (req,res) ->
 
       res.writeHead(200, {
-        "Content-Type": "text/plain; chartset=UTF-8"
+        "Content-Type": "text/cache-manifest; chartset=UTF-8"
       })
       if self.options.cache
         if not cached
