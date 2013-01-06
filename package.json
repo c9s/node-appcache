@@ -15,5 +15,5 @@
   "licenses":     [{
     "type":       "MIT",
     "url":        "https://raw.github.com/jashkenas/coffee-script/master/LICENSE"
-  }],
+  }]
 }
