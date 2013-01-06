@@ -3,6 +3,18 @@ AppCache
 
 AppCache manifest generator for Node.js.
 
+## Features
+
+Provide different modes for generating cache manifest.
+
+* development
+* production
+
+You can configure your own mode for your application.
+
+node-appcache automatically bumps your manifest version, so you 
+don't need to bump it manually.
+
 ## Synopsis
 
 ```coffee
