@@ -15,6 +15,10 @@ You can configure your own mode for your application.
 node-appcache automatically bumps your manifest version, so you 
 don't need to bump it manually.
 
+## Install
+
+    npm install appcache
+
 ## Synopsis
 
 ```coffee
