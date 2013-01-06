@@ -1,7 +1,9 @@
 AppCache
 =========
 
-A simple AppCache manifest generator for Node.js.
+AppCache manifest generator for Node.js.
+
+## Synopsis
 
 ```coffee
 AppCache = require("appcache")
@@ -21,5 +23,11 @@ appcache.configure "production", () ->
     @cache("/socket.io/socket.io.js")
     @network("*")
     @fallback("... ...")
+```
+
+Then in your routes (routes/index.coffee):
+
+```coffee
+exports.appcache = appcache.route()
 ```
 
