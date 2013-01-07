@@ -15,16 +15,19 @@ class AppCache
   constructor: (@cacheFile, @options) ->
     @cacheFile ?= ".appcache"
 
-    # read meta file
-    if fs.existsSync(@cacheFile)
-      @meta = JSON.parse(fs.readFileSync(@cacheFile,"utf8"))
-    else
-      # predefined meta content
-      @meta = { version: 0.01 }
+    @meta = @readMeta()
     @bump()
 
     console.info "AppCache Manifest Version: v#{ @meta.version }" if @options.debug
     fs.writeFileSync(@cacheFile, JSON.stringify(@meta),"utf8")
+
+  readMeta: () ->
+    # read meta file
+    if fs.existsSync(@cacheFile)
+      return JSON.parse(fs.readFileSync(@cacheFile,"utf8"))
+    else
+      # predefined meta content
+      return { version: 0.01 }
 
   bump: () -> @meta.version = (Math.ceil(parseFloat(@meta.version) * 100) / 100) + 0.01
 
