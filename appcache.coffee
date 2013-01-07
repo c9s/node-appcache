@@ -13,15 +13,17 @@ class AppCache
   options: {}
 
   constructor: (@cacheFile, @options) ->
-    # @cacheFile = ".appcache"
+    @cacheFile ?= ".appcache"
+
+    # read meta file
     if fs.existsSync(@cacheFile)
       @meta = JSON.parse(fs.readFileSync(@cacheFile,"utf8"))
     else
+      # predefined meta content
       @meta = { version: 0.01 }
     @bump()
 
-    console.info "AppCache Manifest Version: v#{ @meta.version }"
-
+    console.info "AppCache Manifest Version: v#{ @meta.version }" if @options.debug
     fs.writeFileSync(@cacheFile, JSON.stringify(@meta),"utf8")
 
   bump: () -> @meta.version = (Math.ceil(parseFloat(@meta.version) * 100) / 100) + 0.01
@@ -56,6 +58,10 @@ class AppCache
   clear: () ->
     @fallbackList = @networkList = @cacheList = []
     this
+
+  writeFile: (file,encoding,cb) -> fs.writeFile(file, @write(), encoding, cb)
+
+  writeFileSync: (file,encoding) -> fs.writeFileSync(file, @write(), encoding)
 
   write: ->
     mode = @options?.mode or "development"
