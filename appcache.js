@@ -23,19 +23,31 @@
     AppCache.prototype.options = {};
 
     function AppCache(cacheFile, options) {
+      var _ref;
       this.cacheFile = cacheFile;
       this.options = options;
+      if ((_ref = this.cacheFile) == null)  
+        this.cacheFile = ".appcache";
+      this.meta = this.readMeta();
+      this.bump();
+      if (this.options.debug)  
+        console.info("AppCache Manifest Version: v" + this.meta.version);
+      this.writeMeta(this.meta);
+    }
+
+    AppCache.prototype.writeMeta = function(meta) {
+      return fs.writeFileSync(this.cacheFile, JSON.stringify(meta), "utf8");
+    };
+
+    AppCache.prototype.readMeta = function() {
       if (fs.existsSync(this.cacheFile)) {
-        this.meta = JSON.parse(fs.readFileSync(this.cacheFile, "utf8")); 
+        return JSON.parse(fs.readFileSync(this.cacheFile, "utf8")); 
       } else {
-        this.meta = {
+        return {
           version: 0.01
         };
       }
-      this.bump();
-      console.info("AppCache Manifest Version: v" + this.meta.version);
-      fs.writeFileSync(this.cacheFile, JSON.stringify(this.meta), "utf8");
-    }
+    };
 
     AppCache.prototype.bump = function() {
       return this.meta.version = (Math.ceil(parseFloat(this.meta.version) * 100) / 100) + 0.01;
@@ -80,6 +92,14 @@
     AppCache.prototype.clear = function() {
       this.fallbackList = this.networkList = this.cacheList = [];
       return this;
+    };
+
+    AppCache.prototype.writeFile = function(file, encoding, cb) {
+      return fs.writeFile(file, this.write(), encoding, cb);
+    };
+
+    AppCache.prototype.writeFileSync = function(file, encoding) {
+      return fs.writeFileSync(file, this.write(), encoding);
     };
 
     AppCache.prototype.write = function() {
@@ -146,7 +166,7 @@
       cached = "";
       return function(req, res) {
         res.writeHead(200, {
-          "Content-Type": "text/plain; chartset=UTF-8"
+          "Content-Type": "text/cache-manifest; chartset=UTF-8"
         });
         if (self.options.cache) {
           if (!cached)  

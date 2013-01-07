@@ -1,4 +1,3 @@
-
 fs = require "fs"
 glob = require "glob"
 wrench = require "wrench"
