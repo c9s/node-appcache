@@ -1,6 +1,6 @@
 {
   "name": "appcache",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "appcache generator for offline application",
   "main": "./appcache.coffee",
   "scripts": {
