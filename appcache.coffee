@@ -5,11 +5,15 @@ wrench = require "wrench"
 
 class AppCache
   meta: { }
+
   cacheList: []
+
   networkList: []
+
   fallbackList: []
 
   configures: {}
+
   options: {}
 
   constructor: (@cacheFile, @options) ->
@@ -19,10 +23,11 @@ class AppCache
     @bump()
 
     console.info "AppCache Manifest Version: v#{ @meta.version }" if @options.debug
-    fs.writeFileSync(@cacheFile, JSON.stringify(@meta),"utf8")
+    @writeMeta(@meta)
 
-  readMeta: () ->
-    # read meta file
+  writeMeta: (meta) -> fs.writeFileSync(@cacheFile, JSON.stringify(meta),"utf8")
+
+  readMeta: ->
     if fs.existsSync(@cacheFile)
       return JSON.parse(fs.readFileSync(@cacheFile,"utf8"))
     else
